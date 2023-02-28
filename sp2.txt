@@ -1,0 +1,57 @@
+USE [Gta_Novo]
+GO
+
+/****** Object:  StoredProcedure [dbo].[SP_MGTA_ContaProdutor]    Script Date: 10/02/2023 11:05:18 ******/
+SET ANSI_NULLS ON
+GO
+
+SET QUOTED_IDENTIFIER ON
+GO
+
+
+
+
+CREATE PROCEDURE [dbo].[SP_MGTA_ContaProdutor]
+    @CpfCnpj varchar(14) = NULL,
+	@NomeProdutor varchar(MAX) = NULL,
+	@Cidade int = NULL
+AS
+BEGIN 
+	SELECT
+		Count(*)
+	FROM
+		TB_Produtor
+	INNER JOIN 
+		TB_Propriedade ON TB_Produtor.CNPJCPFProdutor = TB_Propriedade.CNPJCPFProprietario
+	INNER JOIN 
+		TB_Municipios ON TB_Propriedade.CodMunProp = TB_Municipios.CodMunicipio
+	WHERE
+		CNPJCPFProdutor LIKE '%' + @CpfCnpj + '%' AND
+		NomeProdutor LIKE '%' + @NomeProdutor + '%' AND
+		CodMunProp LIKE '%' + convert(varchar, @Cidade) + '%' 
+END
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+GO
+
+

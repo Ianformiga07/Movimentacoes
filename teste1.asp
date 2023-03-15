@@ -18,4 +18,15 @@ For i = 0 To UBound(nomeSplit)
 Next
 
     Response.Write nomeFinal
+%><br>
+------------------------------------------------------------
+<br>
+<%
+cpf3 = "044263330173"
+
+cpf3_Primeiro = Left(cpf3, 3)
+
+cpf3_Final = cpf3_Primeiro & ".***.***-**"
+
+Response.Write cpf3_Final
 %>

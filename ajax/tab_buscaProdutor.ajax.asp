@@ -37,7 +37,6 @@ end if
 call abreConexao
 set rsConsultaProdutor = conn.execute("EXECUTE [SP_MGTA_ConsultaProdutor] @CpfCnpj = '"& CpfCnpj &"', @NomeProdutor = '"& Produtor &"', @Cidade = '"& Cidade &"', @Limit = '"& CSng(Limite2) &"', @Offset = '"& CSng(Offset) &"'")
    
- 
 %>
     <div class="tile">
         <div class=""><b>Resultados:</b> <%= Total &" / "& Linhas%><br></div>
@@ -60,11 +59,59 @@ set rsConsultaProdutor = conn.execute("EXECUTE [SP_MGTA_ConsultaProdutor] @CpfCn
                         Response.CharSet = "UTF-8" 
                         if(Total > 0)then
                             while not rsConsultaProdutor.EOF
-                            %>
+
+                        'Mascara para esconder o CPF'
+                        cpf3 = rsConsultaProdutor("CNPJCPFProdutor")
+                        cpf3_Primeiro = Left(cpf3, 3)
+                        cpf3_Final = cpf3_Primeiro & " . *** . *** - **"
+
+                        nome = rsConsultaProdutor("NomeProdutor")
+                        nomeSplit = split(trim(nome), " ")
+
+                        nomeParcial = ""
+                        For i = 0 To UBound(nomeSplit)
+                        if(nomeSplit(i) <> "")then
+                            nomeParcial = nomeParcial & nomeSplit(i) & " "
+                        end if
+                        next
+
+                        nomeSplit = split(trim(nomeParcial), " ")
+
+                        isEspolio = false
+                        if(LCase(nomeSplit(0)) = LCase("ESPOLIO") OR LCase(nomeSplit(0)) = LCase("ESPÓLIO"))then
+                        isEspolio = true
+                        end if
+
+                        nomeFinal = ""
+                        For i = 0 To UBound(nomeSplit)
+                        if(i = 0)then
+                            nomeFinal = nomeFinal & nomeSplit(i) & " "
+                        end if
+
+                        if(i <> 0)then
+                            if(Len(nomeSplit(i)) > 2)then
+                            if(isEspolio)then
+                                if(i = 1)then
+                                nomeFinal = nomeFinal & nomeSplit(i) & " "
+                                end if
+
+                                if(i <> 1)then
+                                nomeFinal = nomeFinal & Left(nomeSplit(i), 1) & "********* "
+                                end if
+                            Else
+                                nomeFinal = nomeFinal & Left(nomeSplit(i), 1) & "********* "
+                            end if
+                            end if
+                        end if
+                        Next
+                          'response.write nomeFinal
+                          'response.end                           
+
+                        %>
                                 <tr>
                                 
-                                    <td><%=rsConsultaProdutor("CNPJCPFProdutor")%></td>
-                                    <td><%=rsConsultaProdutor("NomeProdutor")%></td>
+                                    <td><%=(cpf3_Final)%></td>
+                                    <td><%=(nomeFinal)%></td>
                                     <td><%=rsConsultaProdutor("NomeProp")%></td>
                                     <td><%=rsConsultaProdutor("NomeMunicipio")%></td>
                                     <td><a href="./cst_UsuMovimentaGTA.asp?id=<%=rsConsultaProdutor("id")%>&codProp=<%=rsConsultaProdutor("idPropriedade")%>"><i class="fa fa-eye fa-2x" ></i></td>

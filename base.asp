@@ -13,7 +13,7 @@
     <meta property="og:url" content="http://pratikborsadiya.in/blog/vali-admin">
     <meta property="og:image" content="http://pratikborsadiya.in/blog/vali-admin/hero-social.png">
     <meta property="og:description" content="Vali is a responsive and free admin theme built with Bootstrap 4, SASS and PUG.js. It's fully customizable and modular.">
-    <title>Blank Page - Vali Admin</title>
+    <title>GTA-Movimentações</title>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -46,7 +46,7 @@
       <ul class="app-menu">
         <li><a class="app-menu__item" href="index.asp"><i class="app-menu__icon fa fa-home"></i><span class="app-menu__label">Início</span></a></li>
         <li><a class="app-menu__item" href="cst_buscaProdutor.asp"><i class="app-menu__icon fa fa-user-o"></i><span class="app-menu__label">Buscar Produtor</span></a></li>
-        <li><a class="app-menu__item" href="cst_buscaProdutor.asp"><i class="app-menu__icon fa fa-dashboard"></i><span class="app-menu__label">Movimentações</span></a></li>
+        <li><a class="app-menu__item" href="cst_buscaProdutor.asp"><i class="app-menu__icon fa fa-dashboard"></i><span class="app-menu__label">Dare</span></a></li>
         <li><a class="app-menu__item" href="cst_UsuMovimentaGTA.asp"><i class="app-menu__icon fa fa-user-circle-o"></i><span class="app-menu__label">Produtor</span></a></li>
       </ul>
     </aside>

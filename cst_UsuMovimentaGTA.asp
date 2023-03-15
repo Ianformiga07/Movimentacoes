@@ -1,6 +1,7 @@
 <%@LANGUAGE="VBSCRIPT" CODEPAGE="65001"%>
+<!--#include file ="base.asp"-->
 <!--#include file ="lib/Conexao.asp"-->
-<!--#include file="base.asp"-->
+
 <%
 cod     = Request.QueryString("id")
 codProp = Request.QueryString("codProp") 
@@ -13,7 +14,49 @@ sql = "SELECT * FROM TB_Produtor INNER JOIN TB_Propriedade ON TB_Produtor.CNPJCP
     NomeProp            =  rs("NomeProp")
     NomeMun             =  rs("NomeMunicipio")
   end if
+
+nomeSplit = split(trim(nome), " ")
+
+nomeParcial = ""
+For i = 0 To UBound(nomeSplit)
+  if(nomeSplit(i) <> "")then
+    nomeParcial = nomeParcial & nomeSplit(i) & " "
+  end if
+next
+
+nomeSplit = split(trim(nomeParcial), " ")
+
+isEspolio = false
+if(LCase(nomeSplit(0)) = LCase("ESPOLIO") OR LCase(nomeSplit(0)) = LCase("ESPÓLIO"))then
+  isEspolio = true
+end if
+
+nomeFinal = ""
+For i = 0 To UBound(nomeSplit)
+  if(i = 0)then
+    nomeFinal = nomeFinal & nomeSplit(i) & " "
+  end if
+
+  if(i <> 0)then
+    if(Len(nomeSplit(i)) > 2)then
+      if(isEspolio)then
+        if(i = 1)then
+          nomeFinal = nomeFinal & nomeSplit(i) & " "
+        end if
+
+        if(i <> 1)then
+          nomeFinal = nomeFinal & Left(nomeSplit(i), 1) & "********* "
+        end if
+      Else
+        nomeFinal = nomeFinal & Left(nomeSplit(i), 1) & "********* "
+      end if
+    end if
+  end if
+Next
+   '  response.write nomeFinal
 call fechaConexao
+
+'response.end
 %>
 
     <main class="app-content">
@@ -30,7 +73,7 @@ call fechaConexao
         <form class="row">
           <div class="form-group col-md">
             <label class="control"><h5>Produtor(a): </h5></label>
-            <label class="control-label "><h6><%=Nome%></h6></label>
+            <label class="control-label "><h6><%=Ucase(nomeFinal)%></h6></label>
           </div>
           <div class="form-group col-md">
             <label class="control"><h5>Propriedade: </h5></label>

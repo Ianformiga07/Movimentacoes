@@ -58,7 +58,6 @@ set rsConsultaProdutor = conn.execute("EXECUTE [SP_MGTA_ConsultaProdutor] @CpfCn
                         Response.AddHeader "Content-Type", "text/html;charset=UTF-8"
                         Response.CodePage = 65001
                         Response.CharSet = "UTF-8" 
-                        
                         if(Total > 0)then
                             while not rsConsultaProdutor.EOF
                             %>

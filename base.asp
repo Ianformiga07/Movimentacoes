@@ -46,8 +46,9 @@
       <ul class="app-menu">
         <li><a class="app-menu__item" href="index.asp"><i class="app-menu__icon fa fa-home"></i><span class="app-menu__label">Início</span></a></li>
         <li><a class="app-menu__item" href="cst_buscaProdutor.asp"><i class="app-menu__icon fa fa-user-o"></i><span class="app-menu__label">Buscar Produtor</span></a></li>
-        <li><a class="app-menu__item" href="cst_buscaProdutor.asp"><i class="app-menu__icon fa fa-dashboard"></i><span class="app-menu__label">Dare</span></a></li>
-        <li><a class="app-menu__item" href="cst_UsuMovimentaGTA.asp"><i class="app-menu__icon fa fa-user-circle-o"></i><span class="app-menu__label">Produtor</span></a></li>
+        <li><a class="app-menu__item" href="cst_buscaProdutor.asp"><i class="app-menu__icon fa fa-dashboard"></i><span class="app-menu__label">Emissão de Boleto</span></a></li>
+        <li><a class="app-menu__item" href="cst_buscaProdutor.asp"><i class="app-menu__icon fa fa-dashboard"></i><span class="app-menu__label">Consultar Boleto</span></a></li>
+        <li><a class="app-menu__item" href="cst_UsuMovimentaGTA.asp"><i class="app-menu__icon fa fa-user-circle-o"></i><span class="app-menu__label">Saldo</span></a></li>
       </ul>
     </aside>
     <!-- Essential javascripts for application to work-->

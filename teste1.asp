@@ -56,3 +56,23 @@ Response.Write cpf3_Final
     </div>
   </div>
 </div>
+<br>
+---------------------------------------------------------------
+<br>
+<div class="div-pai">
+  <div class="div-filha">adasdasdasdasdasdasd</div>
+  <div class="div-filha">asdasdasdasdasdasdsa</div>
+</div>
+
+<style>
+  .div-pai {
+    display: flex;
+    flex-wrap: wrap;
+  }
+  
+  .div-filha {
+    width: 50%;
+    height: 100px;
+    margin: 0 10px;
+  }
+</style>

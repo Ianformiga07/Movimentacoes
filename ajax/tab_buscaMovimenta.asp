@@ -94,22 +94,67 @@
                   <div class="modal-dialog" role="document">
                     <div class="modal-content">
                       <div class="modal-header">
-                        <h4 class="modal-title text-center" id="myModalLabel">GTA - Movimentações &nbsp&nbsp -- UF - TO | Série - F | Numero - 049447</h4>
+                        <h4 class="modal-title text-center" id="myModalLabel">GTA &nbsp&nbsp---&nbsp&nbsp UF - TO &nbsp&nbsp| Série - F &nbsp&nbsp| Numero - 049447</h4>
                       </div>
                       <div class="modal-body">
                         <form class="row">
+                        <div class="divDados">
                           <div class="form-group col-md">
-                            <label class="control">Produtor(a): </label>
+                            <div class="tile-title">Procedência</div>
+                            <label class="control"><strong>CPF/CNPJ:</strong>&nbsp&nbsp</label>
                             <label class="control-label "><%=Ucase(nomeFinal)%></label>
+                            <br>
+                            <label class="control"><strong>Nome:</strong>&nbsp&nbsp</label>
+                            <label class="control-label"><%=NomeProp%></label>
+                            <br>
+                            <label class="control"><strong>Estabelecimento:</strong>&nbsp&nbsp</label>
+                            <label class="control-label"><%=Ucase(NomeMun)%></label>
+                            <br>
+                            <label class="control"><strong>Código PGA:</strong>&nbsp&nbsp</label>
+                            <label class="control-label"><%=Ucase(NomeMun)%></label>
+                            <br>
+                            <label class="control"><strong>Município-UF:</strong>&nbsp&nbsp</label>
+                            <label class="control-label"><%=Ucase(NomeMun)%></label>
                           </div>
+
                           <div class="form-group col-md">
-                            <label class="control"><h5>Propriedade: </h5></label>
-                            <label class="control-label"><h6><%=NomeProp%></h6></label>
+                            <div class="tile-title">Destino</div>
+                            <label class="control"><strong>CPF/CNPJ:</strong>&nbsp&nbsp</label>
+                            <label class="control-label "><%=Ucase(nomeFinal)%></label>
+                            <br>
+                            <label class="control"><strong>Nome:</strong>&nbsp&nbsp</label>
+                            <label class="control-label"><%=NomeProp%></label>
+                            <br>
+                            <label class="control"><strong>Estabelecimento:</strong>&nbsp&nbsp</label>
+                            <label class="control-label"><%=Ucase(NomeMun)%></label>
+                            <br>
+                            <label class="control"><strong>Código PGA:</strong>&nbsp&nbsp</label>
+                            <label class="control-label"><%=Ucase(NomeMun)%></label>
+                            <br>
+                            <label class="control"><strong>Município-UF:</strong>&nbsp&nbsp</label>
+                            <label class="control-label"><%=Ucase(NomeMun)%></label>
                           </div>
+                        </div>
+
+                        <div class="divDados">
                           <div class="form-group col-md">
-                            <label class="control"><h5>Municipio: </h5></label>
-                            <label class="control-label"><h6><%=Ucase(NomeMun)%></h6></label>
+                            <div class="tile-title">Vacinações</div>
+                            <label class="control"><strong>Febre Aftosa:</strong>&nbsp&nbsp</label>
+                            <label class="control-label "><%=Ucase(nomeFinal)%></label>
+                            <br>
+                            <label class="control"><strong>Brucelose:</strong>&nbsp&nbsp</label>
+                            <label class="control-label"><%=NomeProp%></label>
                           </div>
+
+                          <div class="form-group col-md">
+                            <div class="tile-title">Atestados</div>
+                            <label class="control"><strong>Brucelose:</strong>&nbsp&nbsp</label>
+                            <label class="control-label "><%=Ucase(nomeFinal)%></label>
+                            <br>
+                            <label class="control"><strong>Tuberculose:</strong>&nbsp&nbsp</label>
+                            <label class="control-label"><%=NomeProp%></label>
+                          </div>
+                        </div>
                         </form>                        
                       </div>
                       <div class="modal-footer">

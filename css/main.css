@@ -6244,7 +6244,7 @@ a.close.disabled {
   -webkit-box-direction: normal;
       -ms-flex-direction: column;
           flex-direction: column;
-  width: 100%;
+  width: 150%;
   pointer-events: auto;
   background-color: #FFF;
   background-clip: padding-box;
@@ -16753,4 +16753,10 @@ be a descendant of the grid when it is being dragged.
     width: 3.75rem !important;
     height: 3.75rem !important;
     margin-top: -6px !important;
+}
+
+.myModal{
+  width: 200%; /* Define a largura da classe "modal" como 80% */
+  max-width: 800px; /* Define a largura máxima do modal como 600px */
+  margin: 50px; /* Centraliza o modal horizontalmente */
 }

@@ -139,7 +139,7 @@
                         <div class="divDados">
                           <div class="form-group col-md">
                             <div class="tile-title">Vacinações</div>
-                            <label class="control"><strong>Febre Aftosa:</strong>&nbsp&nbsp</label>
+                            <label class="control"><strong>Febre Aftosa:</strong>&nbsp&nbsp</label>2
                             <label class="control-label "><%=Ucase(nomeFinal)%></label>
                             <br>
                             <label class="control"><strong>Brucelose:</strong>&nbsp&nbsp</label>

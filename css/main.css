@@ -6245,6 +6245,7 @@ a.close.disabled {
       -ms-flex-direction: column;
           flex-direction: column;
   width: 150%;
+  height: 150%;
   pointer-events: auto;
   background-color: #FFF;
   background-clip: padding-box;
@@ -6295,6 +6296,7 @@ a.close.disabled {
 .modal-title {
   margin-bottom: 0;
   line-height: 1.5;
+
 }
 
 .modal-body {
@@ -16755,14 +16757,9 @@ be a descendant of the grid when it is being dragged.
     margin-top: -6px !important;
 }
 
-.myModal{
-  width: 200%; /* Define a largura da classe "modal" como 80% */
-  max-width: 800px; /* Define a largura máxima do modal como 600px */
-  margin: 50px; /* Centraliza o modal horizontalmente */
-}
-
 .divDados {
   display: flex;
   flex-wrap: wrap;
   border-bottom: 1px solid black;
+  width: 100%;
 }

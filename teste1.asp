@@ -1,78 +1,80 @@
-<%
-nome = "Elimarcos Ferreira de Morais"
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Exemplo de Modal com Tabela</title>
+	<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+	<style>
+		.modal {
+		  display: none;
+		  position: fixed;
+		  z-index: 1;
+		  left: 0;
+		  top: 0;
+		  width: 100%;
+		  height: 100%;
+		  overflow: auto;
+		  background-color: rgba(0, 0, 0, 0.5);
+		}
 
-nomeSplit = split(nome, " ")
+		.modal-content {
+		  background-color: #fefefe;
+		  margin: 15% auto;
+		  padding: 20px;
+		  border: 1px solid #888;
+		  width: 80%;
+		  max-width: 600px;
+		}
 
-nomeFinal = ""
-For i = 0 To UBound(nomeSplit)
-	if(i = 0)then
-		nomeFinal = nomeFinal & nomeSplit(0) & " "
-	end if
+		.close {
+		  color: #aaa;
+		  float: right;
+		  font-size: 28px;
+		  font-weight: bold;
+		}
 
-	if(i <> 0)then
-		if(Len(nomeSplit(i)) > 2)then
-			nomeFinal = nomeFinal & Left(nomeSplit(i), 1) & "********* "
-		end if
-	end if
+		.close:hover,
+		.close:focus {
+		  color: black;
+		  text-decoration: none;
+		  cursor: pointer;
+		}
+	</style>
+</head>
+<body>
+	<button id="btnAbrirModal">Abrir modal</button>
+	<div id="myModal" class="modal">
+	  <div class="modal-content">
+	    <span class="close">&times;</span>
+	    <h2>Título do modal</h2>
+	    <table>
+	      <tr>
+	        <th>Coluna 1</th>
+	        <th>Coluna 2</th>
+	        <th>Coluna 3</th>
+	      </tr>
+	      <tr>
+	        <td>Dado 1</td>
+	        <td>Dado 2</td>
+	        <td>Dado 3</td>
+	      </tr>
+	      <tr>
+	        <td>Dado 4</td>
+	        <td>Dado 5</td>
+	        <td>Dado 6</td>
+	      </tr>
+	    </table>
+	  </div>
+	</div>
 
-Next
-
-    Response.Write nomeFinal
-%><br>
-------------------------------------------------------------
-<br>
-<%
-cpf3 = "044263330173"
-
-cpf3_Primeiro = Left(cpf3, 3)
-
-cpf3_Final = cpf3_Primeiro & ".***.***-**"
-
-Response.Write cpf3_Final
-%>
-<br>
------------------------------------------------------------
-<br>
-<!-- Button trigger modal -->
-<button type="button" class="btn btn-primary btn-lg" data-toggle="modal" data-target="#myModal">
-  Launch demo modal
-</button>
-
-<!-- Modal -->
-<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
-  <div class="modal-dialog" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-        <h4 class="modal-title" id="myModalLabel">Modal title</h4>
-      </div>
-      <div class="modal-body">
-        ...
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-        <button type="button" class="btn btn-primary">Save changes</button>
-      </div>
-    </div>
-  </div>
-</div>
-<br>
----------------------------------------------------------------
-<br>
-<div class="div-pai">
-  <div class="div-filha">adasdasdasdasdasdasd</div>
-  <div class="div-filha">asdasdasdasdasdasdsa</div>
-</div>
-
-<style>
-  .div-pai {
-    display: flex;
-    flex-wrap: wrap;
-  }
-  
-  .div-filha {
-    width: 50%;
-    height: 100px;
-    margin: 0 10px;
-  }
-</style>
+	<script>
+		$(document).ready(function() {
+		  $("#btnAbrirModal").click(function() {
+		    $("#myModal").show();
+		  });
+		  $(".close").click(function() {
+		    $("#myModal").hide();
+		  });
+		});
+	</script>
+</body>
+</html>

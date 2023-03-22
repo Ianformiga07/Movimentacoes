@@ -27,6 +27,8 @@
                         
                     if(Total > 0)then
                         while not rsConsultaMovimentacao.EOF
+                    numGta = rsConsultaMovimentacao("NumGTA")
+                    serie  = rsConsultaMovimentacao("SerieGTA")   
                     nome = rsConsultaMovimentacao("ProdutorDestino")
                     nomeSplit = split(trim(nome), " ")
 
@@ -87,14 +89,15 @@
                       wend 
                     end if
                     
-                    %>          
-
+                    %>                                       
+                </tbody>
+              </table>
                 <!-- Inicio Modal -->
-                <div class="modal fade modal-xl" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
-                  <div class="modal-dialog" role="document">
-                    <div class="modal-content">
-                      <div class="modal-header">
-                        <h4 class="modal-title text-center" id="myModalLabel">GTA &nbsp&nbsp---&nbsp&nbsp UF - TO &nbsp&nbsp| Série - F &nbsp&nbsp| Numero - 049447</h4>
+                  <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
+                    <div class="modal-dialog" role="document">
+                      <div class="modal-content">
+                        <div class="modal-header">
+                        <h4 class="modal-title" id="myModalLabel">GTA &nbsp&nbsp---&nbsp&nbsp UF - TO &nbsp&nbsp| Série - <%=serie%> &nbsp&nbsp| Numero - <%=numGta%></h4>
                       </div>
                       <div class="modal-body">
                         <form class="row">
@@ -105,7 +108,7 @@
                             <label class="control-label "><%=Ucase(nomeFinal)%></label>
                             <br>
                             <label class="control"><strong>Nome:</strong>&nbsp&nbsp</label>
-                            <label class="control-label"><%=NomeProp%></label>
+                            <label class="control-label"><%=(nomeFinal)%></label>
                             <br>
                             <label class="control"><strong>Estabelecimento:</strong>&nbsp&nbsp</label>
                             <label class="control-label"><%=Ucase(NomeMun)%></label>
@@ -139,7 +142,7 @@
                         <div class="divDados">
                           <div class="form-group col-md">
                             <div class="tile-title">Vacinações</div>
-                            <label class="control"><strong>Febre Aftosa:</strong>&nbsp&nbsp</label>2
+                            <label class="control"><strong>Febre Aftosa:</strong>&nbsp&nbsp</label>
                             <label class="control-label "><%=Ucase(nomeFinal)%></label>
                             <br>
                             <label class="control"><strong>Brucelose:</strong>&nbsp&nbsp</label>
@@ -155,6 +158,83 @@
                             <label class="control-label"><%=NomeProp%></label>
                           </div>
                         </div>
+
+                        <div class="divDados">
+                          <div class="form-group col-md">
+                          <div class="tile-title">Estratificação</div>
+                            <table width="120%">
+                              <tr>
+                                <th>Grupo</th>
+                                <th>Espécie</th>
+                                <th>Categoria</th>
+                                <th>Faixa</th>
+                                <th>Sexo</th>
+                                <th>Quantidade</th>
+                              </tr>
+                              <tr>
+                                <td>Dado 1</td>
+                                <td>Dado 2</td>
+                                <td>Dado 3</td>
+                              </tr>
+                              <tr>
+                                <td>Dado 4</td>
+                                <td>Dado 5</td>
+                                <td>Dado 6</td>
+                              </tr>
+                            </table>
+                          </div>                        
+                        </div>                  
+
+                        <div class="divDados">
+                          <div class="form-group col-md">
+                            <div class="tile-title">Dados Adicionais</div>
+                            <label class="control"><strong>Tipo Eminente:</strong>&nbsp&nbsp</label>
+                            <label class="control-label "><%=Ucase(nomeFinal)%></label>
+                            <br>
+                            <label class="control"><strong>Data Emissão:</strong>&nbsp&nbsp</label>
+                            <label class="control-label"><%=NomeProp%></label>
+                            <br>
+                            <label class="control"><strong>Unidade Expedidora:</strong>&nbsp&nbsp</label>
+                            <label class="control-label"><%=NomeProp%></label>
+                            <br>
+                            <label class="control"><strong>Nr. CRMV:</strong>&nbsp&nbsp</label>
+                            <label class="control-label"><%=NomeProp%></label>
+                          </div>
+
+                          <div class="form-group col-md">
+                            <div class="tile-title">&nbsp</div>
+                            <label class="control"><strong>Validade:</strong>&nbsp&nbsp</label>
+                            <label class="control-label "><%=Ucase(nomeFinal)%></label>
+                            <br>
+                            <label class="control"><strong>Emitente:</strong>&nbsp&nbsp</label>
+                            <label class="control-label"><%=NomeProp%></label>
+                            <br>
+                            <label class="control"><strong>Local:</strong>&nbsp&nbsp</label>
+                            <label class="control-label"><%=NomeProp%></label>
+                            <br>
+                            <label class="control"><strong>Telefone da Unidade:</strong>&nbsp&nbsp</label>
+                            <label class="control-label"><%=NomeProp%></label>
+                          </div>
+                        </div>
+                        <div class="divDados">
+                          <div class="form-group col-md">
+                            <label class="control"><strong>Finalidade:</strong>&nbsp&nbsp</label>
+                            <label class="control-label "><%=Ucase(nomeFinal)%></label>
+                            <br>
+                            <label class="control"><strong>Dados Motorista:</strong>&nbsp&nbsp</label>
+                            <label class="control-label"><%=NomeProp%></label>
+                            <br>
+                            <label class="control"><strong>Meio de Transporte:</strong>&nbsp&nbsp</label>
+                            <label class="control-label"><%=NomeProp%></label>
+                          </div>
+                          <div class="form-group col-md">
+                            <label class="control"><strong>Dare N°:</strong>&nbsp&nbsp</label>
+                            <label class="control-label "><%=Ucase(nomeFinal)%></label>
+                            <br>
+                            <label class="control"><strong>Veiculo:</strong>&nbsp&nbsp</label>
+                            <label class="control-label"><%=NomeProp%></label>
+                          </div>                          
+                        </div>
                         </form>                        
                       </div>
                       <div class="modal-footer">
@@ -162,10 +242,9 @@
                       </div>
                     </div>
                   </div>
-                </div>
-                <!-- Fim Modal -->                             
-                </tbody>
-              </table>
+                </div>  
+                <!-- Fim Modal -->
+
                 <%
                 if (CSng(Linhas) > CSng(Limite))then	
                     %>

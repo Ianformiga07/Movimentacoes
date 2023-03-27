@@ -16763,3 +16763,9 @@ be a descendant of the grid when it is being dragged.
   border-bottom: 1px solid black;
   width: 100%;
 }
+th{
+  text-align: center;
+}
+.estrati{
+  text-align: center;
+}

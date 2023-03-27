@@ -1,3 +1,4 @@
+
 <div class="clearfix"></div>
   <div class="row">
         <div class="col-md-12">
@@ -27,10 +28,63 @@
                         
                     if(Total > 0)then
                         while not rsConsultaMovimentacao.EOF
+                    NomeProdutor = rsConsultaMovimentacao("NomeProdutor")
                     numGta = rsConsultaMovimentacao("NumGTA")
                     serie  = rsConsultaMovimentacao("SerieGTA")   
-                    nome = rsConsultaMovimentacao("ProdutorDestino")
-                    nomeSplit = split(trim(nome), " ")
+                    nomeProdDestino = rsConsultaMovimentacao("ProdutorDestino")
+                    codEsp = rsConsultaMovimentacao("CodEspAnimal")
+'---------------- CPF Produtor Origem --------------------
+                      cpf3 = rsConsultaMovimentacao("CNPJCPFProdutor")
+                      cpf3_Primeiro = Left(cpf3, 3)
+                      cpf3_Final = cpf3_Primeiro & " . *** . *** - **"               
+                      'response.write cpf3
+'---------------- CPF Produtor Destino --------------------
+                      cpfDest = rsConsultaMovimentacao("CNPJCPFDest")
+                      cpfDest_Primeiro = Left(cpfDest, 3)
+                      cpf3_DestFinal = cpfDest_Primeiro & " . *** . *** - **"    
+'---------------- Nome Produtor Origem --------------------
+                    nomeSplit = split(trim(NomeProdutor), " ")
+
+                    nomeParcial = ""
+                    For i = 0 To UBound(nomeSplit)
+                      if(nomeSplit(i) <> "")then
+                        nomeParcial = nomeParcial & nomeSplit(i) & " "
+                      end if
+                    next
+
+                    nomeSplit = split(trim(nomeParcial), " ")
+
+                    isEspolio = false
+                    if(LCase(nomeSplit(0)) = LCase("ESPOLIO") OR LCase(nomeSplit(0)) = LCase("ESPÓLIO"))then
+                      isEspolio = true
+                    end if
+
+                    nomeFinal1 = ""
+                    For i = 0 To UBound(nomeSplit)
+                      if(i = 0)then
+                        nomeFinal1 = nomeFinal1 & nomeSplit(i) & " "
+                      end if
+
+                      if(i <> 0)then
+                        if(Len(nomeSplit(i)) > 2)then
+                          if(isEspolio)then
+                            if(i = 1)then
+                              nomeFinal1 = nomeFinal1 & nomeSplit(i) & " "
+                            end if
+
+                            if(i <> 1)then
+                              nomeFinal1 = nomeFinal1 & Left(nomeSplit(i), 1) & "* "
+                            end if
+                          Else
+                            nomeFinal1 = nomeFinal1 & Left(nomeSplit(i), 1) & "* "
+                          end if
+                        end if
+                      end if
+                    Next
+
+
+'---------------- Nome Produtor Destino -------------------
+                    nomeSplit = split(trim(nomeProdDestino), " ")
 
                     nomeParcial = ""
                     For i = 0 To UBound(nomeSplit)
@@ -60,10 +114,10 @@
                             end if
 
                             if(i <> 1)then
-                              nomeFinal = nomeFinal & Left(nomeSplit(i), 1) & "********* "
+                              nomeFinal = nomeFinal & Left(nomeSplit(i), 1) & "* "
                             end if
                           Else
-                            nomeFinal = nomeFinal & Left(nomeSplit(i), 1) & "********* "
+                            nomeFinal = nomeFinal & Left(nomeSplit(i), 1) & "* "
                           end if
                         end if
                       end if
@@ -74,7 +128,7 @@
                   <tr>
                   
                     <td><%=rsConsultaMovimentacao("NumGTA")%></td>
-                    <td><%=rsConsultaMovimentacao("SerieGTA")%></td>
+                    <td><%=serie%></td>
                     <td><%=rsConsultaMovimentacao("Especie")%></td>
                     <td><%=(nomeFinal)%></td>
                     <td><%=rsConsultaMovimentacao("PropriedadeDestino")%></td>
@@ -82,22 +136,16 @@
                     <td><%=rsConsultaMovimentacao("EstadoDestino")%></td>
                     <td><%=rsConsultaMovimentacao("DataHoraEmissao")%></td>
                     <td><%=rsConsultaMovimentacao("TotalAnimais")%></td>
-                    <td><button type="button" class="btn btn-default" data-toggle="modal" data-target="#myModal"><i class="fa fa-eye fa-2x" ></button></i></td>
+                    <td><button type="button" class="btn btn-default" data-toggle="modal" data-target="#myModal-<%=rsConsultaMovimentacao("NumGTA")%>"><i class="fa fa-eye fa-2x" ></button></i></td>
                   </tr>
-                    <%
-                      rsConsultaMovimentacao.movenext
-                      wend 
-                    end if
-                    
-                    %>                                       
-                </tbody>
-              </table>
+                  <tr>
+                  <td>
                 <!-- Inicio Modal -->
-                  <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
+                  <div class="modal fade" id="myModal-<%=rsConsultaMovimentacao("NumGTA")%>" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
                     <div class="modal-dialog" role="document">
                       <div class="modal-content">
                         <div class="modal-header">
-                        <h4 class="modal-title" id="myModalLabel">GTA &nbsp&nbsp---&nbsp&nbsp UF - TO &nbsp&nbsp| Série - <%=serie%> &nbsp&nbsp| Numero - <%=numGta%></h4>
+                        <h4 class="modal-title" id="myModalLabel">GTA &nbsp&nbsp---&nbsp&nbsp UF - TO &nbsp&nbsp| Série - <%=serie%> &nbsp&nbsp| Numero - <%=rsConsultaMovimentacao("NumGTA")%></h4>
                       </div>
                       <div class="modal-body">
                         <form class="row">
@@ -105,37 +153,37 @@
                           <div class="form-group col-md">
                             <div class="tile-title">Procedência</div>
                             <label class="control"><strong>CPF/CNPJ:</strong>&nbsp&nbsp</label>
-                            <label class="control-label "><%=Ucase(nomeFinal)%></label>
+                            <label class="control-label "><%=Ucase(cpf3_Final)%></label>
                             <br>
                             <label class="control"><strong>Nome:</strong>&nbsp&nbsp</label>
-                            <label class="control-label"><%=(nomeFinal)%></label>
+                            <label class="control-label"><%=UCase(nomeFinal1)%></label>
                             <br>
                             <label class="control"><strong>Estabelecimento:</strong>&nbsp&nbsp</label>
-                            <label class="control-label"><%=Ucase(NomeMun)%></label>
+                            <label class="control-label"><%=Ucase(rsConsultamovimentacao("PropriedadeOrigem"))%></label>
                             <br>
                             <label class="control"><strong>Código PGA:</strong>&nbsp&nbsp</label>
-                            <label class="control-label"><%=Ucase(NomeMun)%></label>
+                            <label class="control-label"><%=Ucase(rsConsultamovimentacao("NumDocPro"))%></label>
                             <br>
                             <label class="control"><strong>Município-UF:</strong>&nbsp&nbsp</label>
-                            <label class="control-label"><%=Ucase(NomeMun)%></label>
+                            <label class="control-label"><%=Ucase(rsConsultamovimentacao("NomeMunicipio"))%></label>
                           </div>
 
                           <div class="form-group col-md">
                             <div class="tile-title">Destino</div>
                             <label class="control"><strong>CPF/CNPJ:</strong>&nbsp&nbsp</label>
-                            <label class="control-label "><%=Ucase(nomeFinal)%></label>
+                            <label class="control-label "><%=Ucase(cpf3_DestFinal)%></label>
                             <br>
                             <label class="control"><strong>Nome:</strong>&nbsp&nbsp</label>
-                            <label class="control-label"><%=NomeProp%></label>
+                            <label class="control-label"><%=Ucase(nomeFinal)%></label>
                             <br>
                             <label class="control"><strong>Estabelecimento:</strong>&nbsp&nbsp</label>
-                            <label class="control-label"><%=Ucase(NomeMun)%></label>
+                            <label class="control-label"><%=Ucase(rsConsultamovimentacao("PropriedadeDestino"))%></label>
                             <br>
                             <label class="control"><strong>Código PGA:</strong>&nbsp&nbsp</label>
-                            <label class="control-label"><%=Ucase(NomeMun)%></label>
+                            <label class="control-label"><%=Ucase(rsConsultamovimentacao("CodMunDest"))%></label>
                             <br>
                             <label class="control"><strong>Município-UF:</strong>&nbsp&nbsp</label>
-                            <label class="control-label"><%=Ucase(NomeMun)%></label>
+                            <label class="control-label"><%=Ucase(rsConsultamovimentacao("MunicipioDestino"))%></label>
                           </div>
                         </div>
 
@@ -143,10 +191,10 @@
                           <div class="form-group col-md">
                             <div class="tile-title">Vacinações</div>
                             <label class="control"><strong>Febre Aftosa:</strong>&nbsp&nbsp</label>
-                            <label class="control-label "><%=Ucase(nomeFinal)%></label>
+                            <label class="control-label "><%=Ucase(rsConsultamovimentacao("PenultimaVacinaFebreAftosa")) %> - <%=Ucase(rsConsultamovimentacao("UltimaVacinaFebreAftosa"))%></label>
                             <br>
                             <label class="control"><strong>Brucelose:</strong>&nbsp&nbsp</label>
-                            <label class="control-label"><%=NomeProp%></label>
+                            <label class="control-label"><%=Ucase(rsConsultamovimentacao("VacinaBrucelose"))%></label>
                           </div>
 
                           <div class="form-group col-md">
@@ -158,33 +206,32 @@
                             <label class="control-label"><%=NomeProp%></label>
                           </div>
                         </div>
-
+                        <%
+                        sql = "SELECT TB_EspecieAnimal.DescEspAnimal as Especie, TB_GTA.TotalMachos, TB_GTA.TotalFemeas,  TB_GTABovinosBubalinos.BovBub412Macho, TB_GTABovinosBubalinos.BovBub02Femea, TB_GTABovinosBubalinos.BovBub38Femea, TB_GTABovinosBubalinos.BovBub912Femea, TB_GTABovinosBubalinos.BovBub412Femea, TB_GTABovinosBubalinos.BovBub1224Macho, TB_GTABovinosBubalinos.BovBub1224Femea, TB_GTABovinosBubalinos.BovBub2436Macho, TB_GTABovinosBubalinos.BovBub2436Femea, TB_GTABovinosBubalinos.BovBub36Macho, TB_GTABovinosBubalinos.BovBub36Femea FROM TB_GTA INNER JOIN TB_GTABovinosBubalinos ON TB_GTA.NumGTA = TB_GTABovinosBubalinos.NumGTA AND TB_GTA.SerieGTA = TB_GTABovinosBubalinos.SerieGTA INNER JOIN TB_EspecieAnimal ON TB_EspecieAnimal.CodEspAnimal = TB_GTA.CodEspAnimal WHERE (TB_GTA.NumGTA = '"&rsConsultaMovimentacao("NumGTA")&"') AND (TB_GTA.SerieGTA = '"&serie&"')"
+                        set rs = conn.execute(sql)
+                        %>
                         <div class="divDados">
                           <div class="form-group col-md">
                           <div class="tile-title">Estratificação</div>
-                            <table width="120%">
+                            <table width="100%">
                               <tr>
-                                <th>Grupo</th>
                                 <th>Espécie</th>
                                 <th>Categoria</th>
                                 <th>Faixa</th>
                                 <th>Sexo</th>
                                 <th>Quantidade</th>
                               </tr>
-                              <tr>
-                                <td>Dado 1</td>
-                                <td>Dado 2</td>
-                                <td>Dado 3</td>
+                              <tr class="estrati">
+                                <td><%=rs("Especie")%></td>
+                                <td>-</td>
+                                <td><%'=rs("")%></td>
+                                <td><%'=rsEstratificacao("")%></td>
+                                <td><%'=rsEstratificacao("")%></td>
                               </tr>
-                              <tr>
-                                <td>Dado 4</td>
-                                <td>Dado 5</td>
-                                <td>Dado 6</td>
-                              </tr>
+
                             </table>
                           </div>                        
                         </div>                  
-
                         <div class="divDados">
                           <div class="form-group col-md">
                             <div class="tile-title">Dados Adicionais</div>
@@ -200,7 +247,6 @@
                             <label class="control"><strong>Nr. CRMV:</strong>&nbsp&nbsp</label>
                             <label class="control-label"><%=NomeProp%></label>
                           </div>
-
                           <div class="form-group col-md">
                             <div class="tile-title">&nbsp</div>
                             <label class="control"><strong>Validade:</strong>&nbsp&nbsp</label>
@@ -242,8 +288,18 @@
                       </div>
                     </div>
                   </div>
-                </div>  
-                <!-- Fim Modal -->
+                </div> 
+                <!-- Fim Modal -->                  
+                  </td>
+                  </tr>
+                    <% 
+                      rsConsultaMovimentacao.movenext
+                      wend 
+                    end if 
+                                      
+                    %>                                     
+                </tbody>
+              </table>
 
                 <%
                 if (CSng(Linhas) > CSng(Limite))then	

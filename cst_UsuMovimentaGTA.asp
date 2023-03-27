@@ -120,12 +120,16 @@ end if
 
 call abreConexao
 set rsConsultaMovimentacao = conn.execute("EXECUTE [SP_MGTA_ConsultaMovimentacao] @id = '"& cod &"', @idPropriedade = '"& codProp &"', @Limit = '"& CSng(Limite2) &"', @Offset = '"& CSng(Offset) &"'")
+serie = rsConsultaMovimentacao("SerieGTA")
 %>
 <div class="alvo-buscaMovimeta">
 <!--#include file="ajax/tab_buscaMovimenta.asp"-->
 </div>
 <%call fechaConexao%>
+
+
 <input type="hidden" name="cod" value="<%=cod%>">
 <input type="hidden" name="codProp" value="<%=codProp%>">
+<input type="hidden" name="codProp" value="<%=serie%>">
     </main>
     <script src="js/buscaMovimenta.js"></script>

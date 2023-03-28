@@ -45,10 +45,10 @@ For i = 0 To UBound(nomeSplit)
         end if
 
         if(i <> 1)then
-          nomeFinal = nomeFinal & Left(nomeSplit(i), 1) & "********* "
+          nomeFinal = nomeFinal & Left(nomeSplit(i), 1) & "* "
         end if
       Else
-        nomeFinal = nomeFinal & Left(nomeSplit(i), 1) & "********* "
+        nomeFinal = nomeFinal & Left(nomeSplit(i), 1) & "* "
       end if
     end if
   end if

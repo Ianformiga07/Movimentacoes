@@ -186,7 +186,29 @@
                             <label class="control-label"><%=Ucase(rsConsultamovimentacao("MunicipioDestino"))%></label>
                           </div>
                         </div>
+                        <%
+                        if rsConsultamovimentacao("CodEspAnimal") = 7100 or rsConsultamovimentacao("CodEspAnimal") = 7140 or rsConsultamovimentacao("CodEspAnimal") = 7130 or rsConsultamovimentacao("CodEspAnimal") = 7170 or rsConsultamovimentacao("CodEspAnimal") = 7184 or rsConsultamovimentacao("CodEspAnimal") = 7197 then
+                        %>
+                        <div class="divDados">
+                          <div class="form-group col-md">
+                            <div class="tile-title">Vacinações</div>
+                            <label class="control"><strong>Marek:</strong>&nbsp&nbsp</label>
+                            <label class="control-label "><%=Ucase(rsConsultamovimentacao("VacinaMarek")) %></label>
+                            <br>
+                            <label class="control"><strong>New Castle:</strong>&nbsp&nbsp</label>
+                            <label class="control-label">-</label>
+                          </div>
 
+                          <div class="form-group col-md">
+                            <div class="tile-title">Atestados</div>
+                            <label class="control"><strong>Ep. Contagios</strong>&nbsp&nbsp</label>
+                            <label class="control-label ">-</label>
+                            <br>
+                            <label class="control"><strong>Negativo Para Equitoparasi:</strong>&nbsp&nbsp</label>
+                            <label class="control-label"><%=Ucase(rsConsultamovimentacao("VerificaCodExame"))%></label>
+                          </div>
+                        </div>
+                        <%else%>
                         <div class="divDados">
                           <div class="form-group col-md">
                             <div class="tile-title">Vacinações</div>
@@ -206,9 +228,16 @@
                             <label class="control-label"><%=NomeProp%></label>
                           </div>
                         </div>
+                        <%end if%>
                         <%
-                        sql = "SELECT TB_EspecieAnimal.DescEspAnimal as Especie, TB_GTA.TotalMachos, TB_GTA.TotalFemeas,  TB_GTABovinosBubalinos.BovBub412Macho, TB_GTABovinosBubalinos.BovBub02Femea, TB_GTABovinosBubalinos.BovBub38Femea, TB_GTABovinosBubalinos.BovBub912Femea, TB_GTABovinosBubalinos.BovBub412Femea, TB_GTABovinosBubalinos.BovBub1224Macho, TB_GTABovinosBubalinos.BovBub1224Femea, TB_GTABovinosBubalinos.BovBub2436Macho, TB_GTABovinosBubalinos.BovBub2436Femea, TB_GTABovinosBubalinos.BovBub36Macho, TB_GTABovinosBubalinos.BovBub36Femea FROM TB_GTA INNER JOIN TB_GTABovinosBubalinos ON TB_GTA.NumGTA = TB_GTABovinosBubalinos.NumGTA AND TB_GTA.SerieGTA = TB_GTABovinosBubalinos.SerieGTA INNER JOIN TB_EspecieAnimal ON TB_EspecieAnimal.CodEspAnimal = TB_GTA.CodEspAnimal WHERE (TB_GTA.NumGTA = '"&rsConsultaMovimentacao("NumGTA")&"') AND (TB_GTA.SerieGTA = '"&serie&"')"
+'---------------------- BOVINOS/BUBALINOS --------------------------------                        
+                        if rsConsultamovimentacao("CodEspAnimal") = 7010 or rsConsultamovimentacao("CodEspAnimal") = 7020 then
+
+                        sql = "SELECT Convert(Varchar,TB_GTABovinosBubalinos.BovBub412Macho)+','+Convert(Varchar,TB_GTABovinosBubalinos.BovBub412Femea)+','+Convert(Varchar,TB_GTABovinosBubalinos.BovBub1224Macho)+','+Convert(Varchar,TB_GTABovinosBubalinos.BovBub1224Femea)+','+Convert(Varchar,TB_GTABovinosBubalinos.BovBub2436Macho)+','+Convert(Varchar,TB_GTABovinosBubalinos.BovBub2436Femea)+','+Convert(Varchar,TB_GTABovinosBubalinos.BovBub36Macho)+','+Convert(Varchar,TB_GTABovinosBubalinos.BovBub36Femea) as Estratificao FROM TB_GTA INNER JOIN TB_GTABovinosBubalinos ON TB_GTA.NumGTA = TB_GTABovinosBubalinos.NumGTA AND TB_GTA.SerieGTA = TB_GTABovinosBubalinos.SerieGTA INNER JOIN TB_EspecieAnimal ON TB_EspecieAnimal.CodEspAnimal = TB_GTA.CodEspAnimal WHERE (TB_GTA.NumGTA = '"&rsConsultaMovimentacao("NumGTA")&"') AND (TB_GTA.SerieGTA = '"&serie&"')"
+                       
                         set rs = conn.execute(sql)
+                        vetorEstratificacao = split(rs("Estratificao"),",")
+                        
                         %>
                         <div class="divDados">
                           <div class="form-group col-md">
@@ -221,64 +250,231 @@
                                 <th>Sexo</th>
                                 <th>Quantidade</th>
                               </tr>
+                              <%
+                             
+                              Dim vetorFaixaEtaria: vetorFaixaEtaria = Array("0 a 12 Meses", "0 a 12 Meses", "13 a 24 Meses", "13 a 24 Meses", "25 a 36 Meses", "25 a 36 Meses", "+36 Meses", "+36 Meses")
+                              Dim vetorSexo: vetorSexo = Array("M", "F", "M", "F", "M", "F", "M", "F")
+                              for i = 0 to UBOUND(vetorEstratificacao)
+                                if vetorEstratificacao(i) > 0 then%>
                               <tr class="estrati">
-                                <td><%=rs("Especie")%></td>
+                                <td><%if rsConsultamovimentacao("CodEspAnimal") = 7010 then%>BOVINOS<%elseif rsConsultamovimentacao("CodEspAnimal") = 7020 then%>BUBALINOS<%end if%></td>
                                 <td>-</td>
-                                <td><%'=rs("")%></td>
-                                <td><%'=rsEstratificacao("")%></td>
-                                <td><%'=rsEstratificacao("")%></td>
+                                <td><%=vetorFaixaEtaria(i)%></td>
+                                <td><%=vetorSexo(i)%></td>
+                                <td><%=vetorEstratificacao(i)%></td>
                               </tr>
-
+                              <%end if%>
+                              <%next%>
+                              
                             </table>
                           </div>                        
-                        </div>                  
+                        </div>
+<%
+'---------------------- EQUINOS --------------------------------                        
+                        elseif rsConsultamovimentacao("CodEspAnimal") = 7050 or rsConsultamovimentacao("CodEspAnimal") = 7070 or rsConsultamovimentacao("CodEspAnimal") = 7074 then
+
+                        sql = "SELECT Convert(Varchar,TB_GTAEquideos.EquinoQtdMachos)+','+Convert(Varchar,TB_GTAEquideos.EquinoQtdMachos)+','+Convert(Varchar,TB_GTAEquideos.EquinoQtdFemeas)+','+Convert(Varchar,TB_GTAEquideos.EquinoQtdMachosMais6)+','+Convert(Varchar,TB_GTAEquideos.EquinoQtdFemeasMais6)+','+Convert(Varchar,TB_GTAEquideos.AsininoQtdMachos)+','+Convert(Varchar,TB_GTAEquideos.AsininoQtdFemeas)+','+Convert(Varchar,TB_GTAEquideos.AsininoQtdMachosMais6)+','+Convert(Varchar,TB_GTAEquideos.AsininoQtdFemeasMais6)+','+Convert(Varchar,TB_GTAEquideos.MuarQtdMachos)+','+Convert(Varchar,TB_GTAEquideos.MuarQtdFemeas)+','+Convert(Varchar,TB_GTAEquideos.MuarQtdMachosMais6)+','+Convert(Varchar,TB_GTAEquideos.MuarQtdFemeasMais6) as EstratificacaoEquinos FROM TB_GTA INNER JOIN TB_GTAEquideos ON TB_GTAEquideos.NumGTA = TB_GTA.NumGTA AND TB_GTAEquideos.SerieGTA = TB_GTA.SerieGTA INNER JOIN TB_EspecieAnimal ON TB_EspecieAnimal.CodEspAnimal = TB_GTA.CodEspAnimal WHERE (TB_GTA.NumGTA = '"&rsConsultaMovimentacao("NumGTA")&"') AND (TB_GTA.SerieGTA = '"&serie&"')"
+                       
+                        set rs = conn.execute(sql)
+                        vetorEstratificacao = split(rs("EstratificacaoEquinos"),",")
+                        
+                        %>
+                        <div class="divDados">
+                          <div class="form-group col-md">
+                          <div class="tile-title">Estratificação</div>
+                            <table width="100%">
+                              <tr>
+                                <th>Espécie</th>
+                                <th>Categoria</th>
+                                <th>Faixa</th>
+                                <th>Sexo</th>
+                                <th>Quantidade</th>
+                              </tr>
+                              <%
+                             
+                              Dim vetorFaixaEtariaEqui: vetorFaixaEtariaEqui = Array("0 a 6 Anos", "0 a 6 Anos", "+6 Anos", "+6 Anos", "0 a 6 Anos", "0 a 6 Anos", "+6 Anos", "+6 0 a 6 Anos", "0 a 6 Anos", "0 a 6 Anos", "+6 Anos", "+6 Anos")
+                              Dim vetorSexoEqui: vetorSexoEqui = Array("M", "F", "M", "F", "M", "F", "M", "F", "M", "F", "M", "F")
+                              for i = 0 to UBOUND(vetorEstratificacao)
+                                if vetorEstratificacao(i) > 0 then%>
+                              <tr class="estrati">
+                                <td><%if rsConsultamovimentacao("CodEspAnimal") = 7050 then%>EQUINOS<%elseif rsConsultamovimentacao("CodEspAnimal") = 7070 then%>MUARES<%elseif rsConsultamovimentacao("CodEspAnimal") = 7074 then%>ASININOS<%end if%></td>
+                                <td>-</td>
+                                <td><%=vetorFaixaEtariaEqui(i)%></td>
+                                <td><%=vetorSexoEqui(i)%></td>
+                                <td><%=vetorEstratificacao(i)%></td>
+                              </tr>
+                                <%end if%>
+                              <%next%>
+                              
+                            </table>
+                          </div>                        
+                        </div>                          
+
+<%
+'---------------------- CAPRINOS/OVINOS --------------------------------                        
+                        elseif rsConsultamovimentacao("CodEspAnimal") = 7040 or rsConsultamovimentacao("CodEspAnimal") = 7080 then
+
+                        sql = "SELECT Convert(Varchar,TB_GTACaprinosOvinos.QtdMachos)+','+Convert(Varchar,TB_GTACaprinosOvinos.QtdFemeas)+','+Convert(Varchar,TB_GTACaprinosOvinos.QtdMachosMais6)+','+Convert(Varchar,TB_GTACaprinosOvinos.QtdFemeasMais6) as EstratificacaoOvinos FROM TB_GTA INNER JOIN TB_GTACaprinosOvinos ON TB_GTACaprinosOvinos.NumGTA = TB_GTA.NumGTA AND TB_GTACaprinosOvinos.SerieGTA = TB_GTA.SerieGTA where (TB_GTA.NumGTA = '"&rsConsultaMovimentacao("NumGTA")&"') AND (TB_GTA.SerieGTA = '"&serie&"')"
+                       
+                        set rs = conn.execute(sql)
+                        vetorEstratificacao = split(rs("EstratificacaoOvinos"),",")
+                        
+                        %>
+                        <div class="divDados">
+                          <div class="form-group col-md">
+                          <div class="tile-title">Estratificação</div>
+                            <table width="100%">
+                              <tr>
+                                <th>Espécie</th>
+                                <th>Categoria</th>
+                                <th>Faixa</th>
+                                <th>Sexo</th>
+                                <th>Quantidade</th>
+                              </tr>
+                              <%
+                             
+                              Dim vetorFaixaEtariaCapri: vetorFaixaEtariaCapri = Array("0 a 6 Anos", "0 a 6 Anos", "+6 Anos", "+6 Anos")
+                              Dim vetorSexoCapri: vetorSexoCapri = Array("M", "F", "M", "F")
+                              for i = 0 to UBOUND(vetorEstratificacao)
+                                if vetorEstratificacao(i) > 0 then%>
+                              <tr class="estrati">
+                                <td><%if rsConsultamovimentacao("CodEspAnimal") = 7040 then%>CAPRINOS<%elseif rsConsultamovimentacao("CodEspAnimal") = 7080 then%>OVINOS<%end if%></td>
+                                <td>-</td>
+                                <td><%=vetorFaixaEtariaCapri(i)%></td>
+                                <td><%=vetorSexoCapri(i)%></td>
+                                <td><%=vetorEstratificacao(i)%></td>
+                              </tr>
+                                <%end if%>
+                              <%next%>
+                              
+                            </table>
+                          </div>                        
+                        </div>
+
+<%
+'---------------------- SUINOS --------------------------------                        
+                        elseif rsConsultamovimentacao("CodEspAnimal") = 7091 or rsConsultamovimentacao("CodEspAnimal") = 7090 or rsConsultamovimentacao("CodEspAnimal") = 7600 or rsConsultamovimentacao("CodEspAnimal") = 7601 then
+
+                        sql = "SELECT top(200)Convert(Varchar,TB_GTASuideos.Suideo02Femea)+','+Convert(Varchar,TB_GTASuideos.Suideo34Macho)+','+Convert(Varchar,TB_GTASuideos.Suideo34Femea)+','+Convert(Varchar,TB_GTASuideos.Suideo56Macho)+','+Convert(Varchar,TB_GTASuideos.Suideo56Femea)+','+Convert(Varchar,TB_GTASuideos.SuideoCachacos)+','+Convert(Varchar,TB_GTASuideos.SuideoMatrizes) as EstratificacaoSuinos FROM TB_GTA inner join TB_GTASuideos on TB_GTASuideos.NumGTA = TB_GTA.NumGTA and TB_GTASuideos.SerieGTA = TB_GTA.SerieGTA where (TB_GTA.NumGTA = '"&rsConsultaMovimentacao("NumGTA")&"') AND (TB_GTA.SerieGTA = '"&serie&"')"
+                       
+                        set rs = conn.execute(sql)
+                        vetorEstratificacao = split(rs("EstratificacaoSuinos"),",")
+                        
+                        %>
+                        <div class="divDados">
+                          <div class="form-group col-md">
+                          <div class="tile-title">Estratificação</div>
+                            <table width="100%">
+                              <tr>
+                                <th>Espécie</th>
+                                <th>Categoria</th>
+                                <th>Faixa</th>
+                                <th>Sexo</th>
+                                <th>Quantidade</th>
+                              </tr>
+                              <%
+                             
+                              Dim vetorFaixaEtariaSuinos: vetorFaixaEtariaSuinos = Array("0 a 2 Meses", "0 a 2 Meses", "3 a 4 Meses", "3 a 4 Meses", "5 a 6 Meses", "5 a 6 Meses", "Cachacos", "Matrizes")
+                              Dim vetorSexoSuinos: vetorSexoSuinos = Array("M", "F", "M", "F","M", "F", "M", "F")
+                              for i = 0 to UBOUND(vetorEstratificacao)
+                                if vetorEstratificacao(i) > 0 then%>
+                              <tr class="estrati">
+                                <td><%if rsConsultamovimentacao("CodEspAnimal") = 7090 then%>SUINOS<%elseif rsConsultamovimentacao("CodEspAnimal") = 7091 then%>JAVALI<%elseif rsConsultamovimentacao("CodEspAnimal") = 7600 then%>CATETO<%elseif rsConsultamovimentacao("CodEspAnimal") = 7601 then%>QUEIXADA<%end if%></td>
+                                <td>-</td>
+                                <td><%=vetorFaixaEtariaSuinos(i)%></td>
+                                <td><%=vetorSexoSuinos(i)%></td>
+                                <td><%=vetorEstratificacao(i)%></td>
+                              </tr>
+                                <%end if%>
+                              <%next%>
+                              
+                            </table>
+                          </div>                        
+                        </div>
+
+<%
+'---------------------- SUINOS --------------------------------                        
+                        elseif rsConsultamovimentacao("CodEspAnimal") = 7100 or rsConsultamovimentacao("CodEspAnimal") = 7140 or rsConsultamovimentacao("CodEspAnimal") = 7130 or rsConsultamovimentacao("CodEspAnimal") = 7170 or rsConsultamovimentacao("CodEspAnimal") = 7184 or rsConsultamovimentacao("CodEspAnimal") = 7197 then
+
+                        sql = "SELECT TB_EspecieAnimal.DescEspAnimal, TB_GTA.Produto, TB_GTA.Categoria, TB_GTA.Aptidao, TB_GTA.TotalAnimais FROM TB_GTA INNER JOIN TB_EspecieAnimal ON TB_EspecieAnimal.CodEspAnimal = TB_GTA.CodEspAnimal where (TB_GTA.NumGTA = '"&rsConsultaMovimentacao("NumGTA")&"') AND (TB_GTA.SerieGTA = '"&serie&"')"
+                       
+                        set rs = conn.execute(sql)
+                        'vetorEstratificacao = split(rs("EstratificacaoSuinos"),",")
+                        
+                        %>
+                        <div class="divDados">
+                          <div class="form-group col-md">
+                          <div class="tile-title">Estratificação</div>
+                            <table width="100%">
+                              <tr>
+                                <th>Espécie</th>
+                                <th>Produto</th>
+                                <th>Categoria</th>
+                                <th>Aptidão</th>
+                                <th>Quantidade</th>
+                              </tr>
+                              <%
+                             
+                              'Dim vetorFaixaEtariaSuinos: vetorFaixaEtariaSuinos = Array("0 a 2 Meses", "0 a 2 Meses", "3 a 4 Meses", "3 a 4 Meses", "5 a 6 Meses", "5 a 6 Meses", "Cachacos", "Matrizes")
+                              'Dim vetorSexoSuinos: vetorSexoSuinos = Array("M", "F", "M", "F","M", "F", "M", "F")
+                             ' for i = 0 to UBOUND(vetorEstratificacao)
+                               ' if vetorEstratificacao(i) > 0 then%>
+                              <tr class="estrati">
+                                <td><%if rsConsultamovimentacao("CodEspAnimal") = 7100 then%>GALINHAS<%elseif rsConsultamovimentacao("CodEspAnimal") = 7140 then%>CODORNA CHINESA<%elseif rsConsultamovimentacao("CodEspAnimal") = 7130 then%>PERUS<%elseif rsConsultamovimentacao("CodEspAnimal") = 7170 then%>GALINHAS D'ANGOLA<%elseif rsConsultamovimentacao("CodEspAnimal") = 7184 then%>EMAS<%elseif rsConsultamovimentacao("CodEspAnimal") = 7197 then%>AVESTRUZES<%end if%></td>
+                                <td><%=rs("Produto")%></td>
+                                <td><%=rs("Categoria")%></td>
+                                <td><%=rs("Aptidao")%></td>
+                                <td><%=rs("TotalAnimais")%></td>
+                              </tr>
+                                <%'end if%>
+                              <%'next%>
+                              
+                            </table>
+                          </div>                        
+                        </div>
+                        <%end if%>                 
                         <div class="divDados">
                           <div class="form-group col-md">
                             <div class="tile-title">Dados Adicionais</div>
                             <label class="control"><strong>Tipo Eminente:</strong>&nbsp&nbsp</label>
-                            <label class="control-label "><%=Ucase(nomeFinal)%></label>
+                            <label class="control-label "><%=Ucase(rsConsultamovimentacao("DescrTipoEmitente"))%></label>
                             <br>
                             <label class="control"><strong>Data Emissão:</strong>&nbsp&nbsp</label>
-                            <label class="control-label"><%=NomeProp%></label>
+                            <label class="control-label"><%=Ucase(rsConsultamovimentacao("DataHoraEmissao"))%></label>
                             <br>
                             <label class="control"><strong>Unidade Expedidora:</strong>&nbsp&nbsp</label>
-                            <label class="control-label"><%=NomeProp%></label>
-                            <br>
-                            <label class="control"><strong>Nr. CRMV:</strong>&nbsp&nbsp</label>
-                            <label class="control-label"><%=NomeProp%></label>
+                            <label class="control-label"><%=Ucase(rsConsultamovimentacao("NomeUnidadeExpedidora"))%></label>
                           </div>
                           <div class="form-group col-md">
                             <div class="tile-title">&nbsp</div>
                             <label class="control"><strong>Validade:</strong>&nbsp&nbsp</label>
-                            <label class="control-label "><%=Ucase(nomeFinal)%></label>
+                            <label class="control-label "><%=Ucase(rsConsultamovimentacao("DataValidadeGTA"))%></label>
                             <br>
                             <label class="control"><strong>Emitente:</strong>&nbsp&nbsp</label>
-                            <label class="control-label"><%=NomeProp%></label>
+                            <label class="control-label"><%=Ucase(rsConsultamovimentacao("NomeEmitente"))%></label>
                             <br>
                             <label class="control"><strong>Local:</strong>&nbsp&nbsp</label>
-                            <label class="control-label"><%=NomeProp%></label>
+                            <label class="control-label"><%=Ucase(rsConsultamovimentacao("NomeMunEmissao"))%></label>
                             <br>
                             <label class="control"><strong>Telefone da Unidade:</strong>&nbsp&nbsp</label>
-                            <label class="control-label"><%=NomeProp%></label>
+                            <label class="control-label"><%=Ucase(rsConsultamovimentacao("TelefoneUnidadeExpedidora"))%></label>
                           </div>
                         </div>
                         <div class="divDados">
                           <div class="form-group col-md">
                             <label class="control"><strong>Finalidade:</strong>&nbsp&nbsp</label>
-                            <label class="control-label "><%=Ucase(nomeFinal)%></label>
+                            <label class="control-label "><%=Ucase(rsConsultamovimentacao("NomeFinalidade"))%></label>
                             <br>
                             <label class="control"><strong>Dados Motorista:</strong>&nbsp&nbsp</label>
-                            <label class="control-label"><%=NomeProp%></label>
-                            <br>
-                            <label class="control"><strong>Meio de Transporte:</strong>&nbsp&nbsp</label>
-                            <label class="control-label"><%=NomeProp%></label>
+                            <label class="control-label"><%=Ucase(rsConsultamovimentacao("NomeMotorista"))%></label>
+
                           </div>
                           <div class="form-group col-md">
-                            <label class="control"><strong>Dare N°:</strong>&nbsp&nbsp</label>
-                            <label class="control-label "><%=Ucase(nomeFinal)%></label>
-                            <br>
+                            <label class="control"><strong>Meio de Transporte:</strong>&nbsp&nbsp</label>
+                            <label class="control-label"><%=Ucase(rsConsultamovimentacao("NomeTipoTransporte"))%></label>
+                            <br>                            
                             <label class="control"><strong>Veiculo:</strong>&nbsp&nbsp</label>
-                            <label class="control-label"><%=NomeProp%></label>
+                            <label class="control-label"><%=Ucase(rsConsultamovimentacao("Placa"))%></label>
                           </div>                          
                         </div>
                         </form>                        

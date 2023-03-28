@@ -33,6 +33,7 @@
                     serie  = rsConsultaMovimentacao("SerieGTA")   
                     nomeProdDestino = rsConsultaMovimentacao("ProdutorDestino")
                     codEsp = rsConsultaMovimentacao("CodEspAnimal")
+                    nomeEmitente = rsConsultamovimentacao("NomeEmitente")
 '---------------- CPF Produtor Origem --------------------
                       cpf3 = rsConsultaMovimentacao("CNPJCPFProdutor")
                       cpf3_Primeiro = Left(cpf3, 3)
@@ -118,6 +119,49 @@
                             end if
                           Else
                             nomeFinal = nomeFinal & Left(nomeSplit(i), 1) & "* "
+                          end if
+                        end if
+                      end if
+                    Next
+                        'response.write nomeFinal
+                        'response.end
+                    %>
+<%
+'---------------- Nome Emitente -------------------
+                    nomeSplit = split(trim(nomeEmitente), " ")
+
+                    nomeParcial = ""
+                    For i = 0 To UBound(nomeSplit)
+                      if(nomeSplit(i) <> "")then
+                        nomeParcial = nomeParcial & nomeSplit(i) & " "
+                      end if
+                    next
+
+                    nomeSplit = split(trim(nomeParcial), " ")
+
+                    isEspolio = false
+                    if(LCase(nomeSplit(0)) = LCase("ESPOLIO") OR LCase(nomeSplit(0)) = LCase("ESPÓLIO"))then
+                      isEspolio = true
+                    end if
+
+                    nomeFinalEmi = ""
+                    For i = 0 To UBound(nomeSplit)
+                      if(i = 0)then
+                        nomeFinalEmi = nomeFinalEmi & nomeSplit(i) & " "
+                      end if
+
+                      if(i <> 0)then
+                        if(Len(nomeSplit(i)) > 2)then
+                          if(isEspolio)then
+                            if(i = 1)then
+                              nomeFinalEmi = nomeFinalEmi & nomeSplit(i) & " "
+                            end if
+
+                            if(i <> 1)then
+                              nomeFinalEmi = nomeFinalEmi & Left(nomeSplit(i), 1) & "* "
+                            end if
+                          Else
+                            nomeFinalEmi = nomeFinalEmi & Left(nomeSplit(i), 1) & "* "
                           end if
                         end if
                       end if
@@ -465,7 +509,7 @@
                             <label class="control-label "><%=Ucase(rsConsultamovimentacao("DataValidadeGTA"))%></label>
                             <br>
                             <label class="control"><strong>Emitente:</strong>&nbsp&nbsp</label>
-                            <label class="control-label"><%=Ucase(rsConsultamovimentacao("NomeEmitente"))%></label>
+                            <label class="control-label"><%=Ucase(nomeFinalEmi)%></label>
                             <br>
                             <label class="control"><strong>Local:</strong>&nbsp&nbsp</label>
                             <label class="control-label"><%=Ucase(rsConsultamovimentacao("NomeMunEmissao"))%></label>

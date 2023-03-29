@@ -34,6 +34,7 @@
                     nomeProdDestino = rsConsultaMovimentacao("ProdutorDestino")
                     codEsp = rsConsultaMovimentacao("CodEspAnimal")
                     nomeEmitente = rsConsultamovimentacao("NomeEmitente")
+                    NomeMotorista = rsConsultamovimentacao("NomeMotorista")
 '---------------- CPF Produtor Origem --------------------
                       cpf3 = rsConsultaMovimentacao("CNPJCPFProdutor")
                       cpf3_Primeiro = Left(cpf3, 3)
@@ -119,6 +120,49 @@
                             end if
                           Else
                             nomeFinal = nomeFinal & Left(nomeSplit(i), 1) & "* "
+                          end if
+                        end if
+                      end if
+                    Next
+                        'response.write nomeFinal
+                        'response.end
+                    %>
+<%
+'---------------- Nome Motorista -------------------
+                    nomeSplit = split(trim(NomeMotorista), " ")
+
+                    nomeParcial = ""
+                    For i = 0 To UBound(nomeSplit)
+                      if(nomeSplit(i) <> "")then
+                        nomeParcial = nomeParcial & nomeSplit(i) & " "
+                      end if
+                    next
+
+                    nomeSplit = split(trim(nomeParcial), " ")
+
+                    isEspolio = false
+                    if(LCase(nomeSplit(0)) = LCase("ESPOLIO") OR LCase(nomeSplit(0)) = LCase("ESPÓLIO"))then
+                      isEspolio = true
+                    end if
+
+                    nomeFinalMoto = ""
+                    For i = 0 To UBound(nomeSplit)
+                      if(i = 0)then
+                        nomeFinalMoto = nomeFinalMoto & nomeSplit(i) & " "
+                      end if
+
+                      if(i <> 0)then
+                        if(Len(nomeSplit(i)) > 2)then
+                          if(isEspolio)then
+                            if(i = 1)then
+                              nomeFinalMoto = nomeFinalMoto & nomeSplit(i) & " "
+                            end if
+
+                            if(i <> 1)then
+                              nomeFinalMoto = nomeFinalMoto & Left(nomeSplit(i), 1) & "* "
+                            end if
+                          Else
+                            nomeFinalMoto = nomeFinalMoto & Left(nomeSplit(i), 1) & "* "
                           end if
                         end if
                       end if

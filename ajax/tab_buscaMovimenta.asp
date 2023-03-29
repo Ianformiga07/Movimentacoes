@@ -129,6 +129,7 @@
                     %>
 <%
 '---------------- Nome Motorista -------------------
+if NomeMotorista <> "" then
                     nomeSplit = split(trim(NomeMotorista), " ")
 
                     nomeParcial = ""
@@ -169,6 +170,7 @@
                     Next
                         'response.write nomeFinal
                         'response.end
+end if                        
                     %>
 <%
 '---------------- Nome Emitente -------------------

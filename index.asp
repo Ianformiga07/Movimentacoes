@@ -1,7 +1,7 @@
 <!--#include file="base.asp"-->
 <main class="app-content">
       <div class="tile">
-      <h3 class="tile-title">Sistema de Movimentações de GTA</h3>
+      <h3 class="tile-title">Sistema de Consulta de Movimentações de e-GTA</h3>
 <div class="card-header py-3">
                 <h4 class="m-0 font-weight-bold text-center">Olá, Prezados Senhores (as)!</h4>
             </div>

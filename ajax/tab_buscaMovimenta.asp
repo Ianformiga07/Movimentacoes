@@ -311,6 +311,15 @@ end if
                             <label class="control-label"><%=Ucase(rsConsultamovimentacao("VerificaCodExameAIE"))%></label>
                           </div>                          
                         </div>
+                        <%elseif rsConsultamovimentacao("CodEspAnimal") = 7500 or rsConsultamovimentacao("CodEspAnimal") = 7513 or rsConsultamovimentacao("CodEspAnimal") = 7602 or rsConsultamovimentacao("CodEspAnimal") = 7603 then%>
+                        <div class="divDados">
+                          <div class="form-group col-md">
+                            <div class="tile-title">Atestados</div>
+                          </div>
+                          <div class="form-group col-md">
+                            <div class="tile-title">Vacinações</div>
+                          </div>                          
+                        </div>                        
                         <%else%>
                         <div class="divDados">
                           <div class="form-group col-md">
@@ -536,6 +545,46 @@ end if
                             </table>
                           </div>                        
                         </div>
+<%
+'---------------------- PEIXES --------------------------------                        
+                        elseif rsConsultamovimentacao("CodEspAnimal") = 7500 or rsConsultamovimentacao("CodEspAnimal") = 7513 or rsConsultamovimentacao("CodEspAnimal") = 7602 or rsConsultamovimentacao("CodEspAnimal") = 7603 then
+
+                        sql = "SELECT TB_EspecieAnimal.DescEspAnimal, TB_GTA.Produto, TB_GTA.Categoria, TB_GTA.Aptidao, TB_GTA.TotalAnimais FROM TB_GTA INNER JOIN TB_EspecieAnimal ON TB_EspecieAnimal.CodEspAnimal = TB_GTA.CodEspAnimal where (TB_GTA.NumGTA = '"&rsConsultaMovimentacao("NumGTA")&"') AND (TB_GTA.SerieGTA = '"&serie&"')"
+                       
+                        set rs = conn.execute(sql)
+                        'vetorEstratificacao = split(rs("EstratificacaoSuinos"),",")
+                        
+                        %>
+                        <div class="divDados">
+                          <div class="form-group col-md">
+                          <div class="tile-title">Estratificação</div>
+                            <table width="100%">
+                              <tr>
+                                <th>Espécie</th>
+                                <th>Produto</th>
+                                <th>Unidade Medida</th>
+                                <th>Categoria</th>
+                                <th>Quantidade</th>
+                              </tr>
+                              <%
+                             
+                              'Dim vetorFaixaEtariaSuinos: vetorFaixaEtariaSuinos = Array("0 a 2 Meses", "0 a 2 Meses", "3 a 4 Meses", "3 a 4 Meses", "5 a 6 Meses", "5 a 6 Meses", "Cachacos", "Matrizes")
+                              'Dim vetorSexoSuinos: vetorSexoSuinos = Array("M", "F", "M", "F","M", "F", "M", "F")
+                             ' for i = 0 to UBOUND(vetorEstratificacao)
+                               ' if vetorEstratificacao(i) > 0 then%>
+                              <tr class="estrati">
+                                <td><%if rsConsultamovimentacao("CodEspAnimal") = 7500 then%>PEIXES<%elseif rsConsultamovimentacao("CodEspAnimal") = 7513 then%>ANFÍBIOS<%elseif rsConsultamovimentacao("CodEspAnimal") = 7602 then%>CRUSTÁCEOS<%elseif rsConsultamovimentacao("CodEspAnimal") = 7603 then%>MOLUSCOS<%end if%></td>
+                                <td><%=rs("Produto")%></td>
+                                <td><%=rs("Aptidao")%></td>
+                                <td>-</td>
+                                <td><%=rs("TotalAnimais")%></td>
+                              </tr>
+                                <%'end if%>
+                              <%'next%>
+                              
+                            </table>
+                          </div>                        
+                        </div>                        
                         <%end if%>                 
                         <div class="divDados">
                           <div class="form-group col-md">

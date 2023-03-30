@@ -231,12 +231,16 @@ end if
                   <tr>
                   <td>
                 <!-- Inicio Modal -->
+                
                   <div class="modal fade" id="myModal-<%=rsConsultaMovimentacao("NumGTA")%>" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
-                    <div class="modal-dialog" role="document">
+                    <div class="modal-dialog modal-lg" role="document">
                       <div class="modal-content">
                         <div class="modal-header">
                         <h4 class="modal-title" id="myModalLabel">GTA &nbsp&nbsp---&nbsp&nbsp UF - TO &nbsp&nbsp| Série - <%=serie%> &nbsp&nbsp| Numero - <%=rsConsultaMovimentacao("NumGTA")%></h4>
-                      </div>
+                        <button type="button" class="Close" data-dismiss="modal" aria-label="Close">
+                          <span aria-hidden="true">X</span>
+                        </button>                      
+                      </div>                    
                       <div class="modal-body">
                         <form class="row">
                         <div class="divDados">

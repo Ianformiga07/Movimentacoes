@@ -6044,7 +6044,7 @@ a.badge-dark:focus, a.badge-dark.focus {
 }
 
 .close {
-  float: right;
+  float: left;
   font-size: 1.3125rem;
   font-weight: 700;
   line-height: 1;
@@ -6244,8 +6244,7 @@ a.close.disabled {
   -webkit-box-direction: normal;
       -ms-flex-direction: column;
           flex-direction: column;
-  width: 150%;
-  height: 150%;
+
   pointer-events: auto;
   background-color: #FFF;
   background-clip: padding-box;
@@ -6289,8 +6288,10 @@ a.close.disabled {
 }
 
 .modal-header .close {
-  padding: 1rem 1rem;
-  margin: -1rem -1rem -1rem auto;
+  position: absolute;
+  top: 0;
+  right: 0;
+  z-index: 1;
 }
 
 .modal-title {

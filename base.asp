@@ -25,7 +25,7 @@
   </head>
   <body class="app sidebar-mini">
     <!-- Navbar-->
-    <header class="app-header"><a class="app-header__logo" href="index.html"><img src="images/gta.png" style="width:150px; height:48px;" alt="homepage" /></a>
+    <header class="app-header"><a class="app-header__logo" href="index.html"><img src="images/egta1.png" style="width:210px; height:62px;" alt="homepage" /></a>
       <!-- Sidebar toggle button--><a class="app-sidebar__toggle" href="#" data-toggle="sidebar" aria-label="Hide Sidebar"></a>
       <!-- Navbar Right Menu-->
       <ul class="app-nav">

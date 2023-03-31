@@ -215,7 +215,7 @@ end if
                         'response.write nomeFinal
                         'response.end
                     %>
-                  <tr>
+                  <tr class="estrati">
                   
                     <td><%=rsConsultaMovimentacao("NumGTA")%></td>
                     <td><%=serie%></td>

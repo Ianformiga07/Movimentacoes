@@ -108,7 +108,7 @@ set rsConsultaProdutor = conn.execute("EXECUTE [SP_MGTA_ConsultaProdutor] @CpfCn
                           'response.end                           
 
                         %>
-                                <tr>
+                                <tr class="estrati">
                                 
                                     <td><%=(cpf3_Final)%></td>
                                     <td><%=(nomeFinal)%></td>

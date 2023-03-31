@@ -1,0 +1,74 @@
+USE [Gta_Novo]
+GO
+/****** Object:  StoredProcedure [dbo].[SP_MGTA_ConsultaProdutor]    Script Date: 30/03/2023 12:27:04 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+
+
+
+ALTER PROCEDURE [dbo].[SP_MGTA_ConsultaProdutor]
+	@Limit int = NULL,
+	@Offset int = NULL,
+    @CpfCnpj varchar(14) = NULL,
+	@NomeProdutor varchar(MAX) = NULL,
+	@Cidade int = NULL
+AS
+BEGIN 
+	WITH Paginacao AS
+	(
+		SELECT
+			TB_Produtor.id,
+			TB_Propriedade.IdPropriedade,
+			CNPJCPFProdutor, 
+			NomeProdutor, 
+			NomeProp, 
+			NomeMunicipio,
+			ROW_NUMBER() OVER(ORDER BY NomeProdutor ASC) AS row_number
+		FROM
+			TB_Produtor
+		INNER JOIN 
+			TB_Propriedade ON TB_Produtor.CNPJCPFProdutor = TB_Propriedade.CNPJCPFProprietario
+		INNER JOIN 
+			TB_Municipios ON TB_Propriedade.CodMunProp = TB_Municipios.CodMunicipio
+		WHERE
+			CNPJCPFProdutor LIKE @CpfCnpj + '%' AND
+			NomeProdutor LIKE '%' + @NomeProdutor + '%' AND
+			CodMunProp LIKE '%' + convert(varchar, @Cidade) + '%' 
+	)
+	SELECT
+			id,
+			idPropriedade,
+			CNPJCPFProdutor, 
+			NomeProdutor, 
+			NomeProp, 
+			NomeMunicipio
+	FROM
+		Paginacao
+	WHERE
+		row_number BETWEEN @OFFSET AND @LIMIT
+	ORDER BY NomeProdutor ASC
+END
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

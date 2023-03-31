@@ -1,0 +1,163 @@
+USE [Gta_Novo]
+GO
+/****** Object:  StoredProcedure [dbo].[SP_MGTA_ConsultaMovimentacao]    Script Date: 30/03/2023 12:26:02 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+
+
+
+ALTER PROCEDURE [dbo].[SP_MGTA_ConsultaMovimentacao]
+	@Limit int = NULL,
+	@Offset int = NULL,
+    @id int = NULL,
+	@idPropriedade varchar(12) = NULL
+	
+AS
+BEGIN 
+	WITH Paginacao AS
+	(
+		SELECT
+			TB_Produtor.id,
+			CNPJCPFProdutor,
+			NomeProdutor,
+			IdPropriedade,
+			CodMunProp,
+			NomeMunicipio,
+			CNPJCPFDest,
+			NumGTA,
+			SerieGTA,
+			(select top(1)DataVacina from  TB_VacinasGTA where NumGTA = TB_GTA.NumGTA AND SerieGTA = TB_GTA.SerieGTA AND CodVacina = 3 order by  DataVacina desc) as UltimaVacinaFebreAftosa,
+			(select top(1)DataVacina from  TB_VacinasGTA where NumGTA = TB_GTA.NumGTA AND SerieGTA = TB_GTA.SerieGTA AND CodVacina = 3 order by  DataVacina Asc) as PenultimaVacinaFebreAftosa,
+			(select top(1)DataVacina from  TB_VacinasGTA where NumGTA = TB_GTA.NumGTA AND SerieGTA = TB_GTA.SerieGTA AND CodVacina = 4 order by  DataVacina desc) as VacinaBrucelose,
+			(select top(1)DataVacina from  TB_VacinasGTA where NumGTA = TB_GTA.NumGTA AND SerieGTA = TB_GTA.SerieGTA AND CodVacina = 17 order by  DataVacina desc) as VacinaMarek,
+			(SELECT 
+				CASE 
+					WHEN EXISTS (SELECT 1 FROM TB_ExamesGTA WHERE NumGTA = TB_GTA.NumGTA AND SerieGTA = TB_GTA.SerieGTA AND CodExame = 4)
+					THEN 'Sim'
+					ELSE 'Não'
+				END AS Resultado
+			) AS VerificaCodExameBrucelose,
+			(SELECT 
+				CASE 
+					WHEN EXISTS (SELECT 1 FROM TB_ExamesGTA WHERE NumGTA = TB_GTA.NumGTA AND SerieGTA = TB_GTA.SerieGTA AND CodExame = 5)
+					THEN 'Sim'
+					ELSE 'Não'
+				END AS Resultado
+			) AS VerificaCodExameTuberculose,			
+			(SELECT 
+				CASE 
+					WHEN EXISTS (SELECT 1 FROM TB_ExamesGTA WHERE NumGTA = TB_GTA.NumGTA AND SerieGTA = TB_GTA.SerieGTA AND CodExame = 18)
+					THEN 'Sim'
+					ELSE 'Não'
+				END AS Resultado
+			) AS VerificaCodExame,
+			(SELECT 
+				CASE 
+					WHEN EXISTS (SELECT 1 FROM TB_ExamesGTA WHERE NumGTA = TB_GTA.NumGTA AND SerieGTA = TB_GTA.SerieGTA AND CodExame = 26)
+					THEN 'Sim'
+					ELSE 'Não'
+				END AS Resultado
+			) AS VerificaCodExameGripe,
+			(SELECT 
+				CASE 
+					WHEN EXISTS (SELECT 1 FROM TB_ExamesGTA WHERE NumGTA = TB_GTA.NumGTA AND SerieGTA = TB_GTA.SerieGTA AND CodExame = 11)
+					THEN 'Sim'
+					ELSE 'Não'
+				END AS Resultado
+			) AS VerificaCodExameAIE,
+			TB_GTA.CodEspAnimal,
+			NomeProp,
+			NumDocPro,
+			DescEspAnimal,
+			NomeDest,
+			EstabDest,
+			CodMunDest,
+			NomeMunDest,
+			UFDest,
+			NomeEstado,
+			DataHoraEmissao,
+			TotalAnimais,
+			TB_GTA.CodFinalidade,
+			DescrTipoEmitente,
+			NomeUnidadeExpedidora,
+			DataValidadeGTA,
+			NomeEmitente,
+			NomeMunEmissao,
+			TelefoneUnidadeExpedidora,
+			NomeFinalidade,
+			NomeMotorista,
+			Placa,
+			NomeTipoTransporte,
+			ROW_NUMBER() OVER(ORDER BY NomeProdutor ASC) AS row_number
+		FROM
+			TB_Produtor
+		INNER JOIN 
+			TB_Propriedade ON TB_Produtor.CNPJCPFProdutor = TB_Propriedade.CNPJCPFProprietario
+		INNER JOIN 
+			TB_GTA ON TB_GTA.CNPJCPFPro = TB_Produtor.CNPJCPFProdutor
+		inner join 
+			TB_EspecieAnimal on TB_EspecieAnimal.CodEspAnimal = TB_GTA.CodEspAnimal
+		inner join
+			TB_Estado on TB_Estado.CodEstado = TB_GTA.UFDest
+		inner join
+			TB_Municipios on TB_Municipios.CodMunicipio = TB_Produtor.CodMunProdutor
+		INNER JOIN
+            TB_Finalidade ON TB_Finalidade.CodFinalidade = TB_GTA.CodFinalidade
+		 INNER JOIN
+             TB_TipoTransporte ON TB_TipoTransporte.CodTipoTransporte = TB_GTA.CodTipoTransporte
+		WHERE
+
+			TB_Produtor.id = @id and
+			IdPropriedade = @idPropriedade
+	)
+	SELECT
+			id,
+			CNPJCPFProdutor,
+			NomeProdutor,
+			IdPropriedade,
+			CodMunProp,
+			NomeMunicipio,
+			CNPJCPFDest,
+			NumGTA,
+			SerieGTA,
+			UltimaVacinaFebreAftosa,
+			PenultimaVacinaFebreAftosa,
+			VacinaBrucelose,
+			VacinaMarek,
+			VerificaCodExameBrucelose,
+			VerificaCodExameTuberculose,
+			VerificaCodExame,
+			VerificaCodExameGripe,
+			VerificaCodExameAIE,
+			CodEspAnimal,
+			NomeProp as PropriedadeOrigem,
+			NumDocPro,
+			DescEspAnimal as Especie,
+			NomeDest as ProdutorDestino,
+			EstabDest as PropriedadeDestino,
+			CodMunDest,
+			NomeMunDest as MunicipioDestino,
+			NomeEstado as EstadoDestino,
+			DataHoraEmissao,
+			TotalAnimais,
+			CodFinalidade,
+			DescrTipoEmitente,
+			NomeUnidadeExpedidora,
+			DataValidadeGTA,
+			NomeEmitente,
+			NomeMunEmissao,
+			TelefoneUnidadeExpedidora,
+			NomeFinalidade,
+			NomeMotorista,
+			Placa,
+			NomeTipoTransporte
+	FROM
+		Paginacao
+	WHERE
+		row_number BETWEEN @OFFSET AND @LIMIT
+	ORDER BY id + dataHoraEmissao desc
+END
+
+

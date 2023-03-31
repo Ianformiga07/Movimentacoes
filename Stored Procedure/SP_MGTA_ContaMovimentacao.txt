@@ -1,0 +1,32 @@
+USE [Gta_Novo]
+GO
+/****** Object:  StoredProcedure [dbo].[SP_MGTA_ContaMovimentacao]    Script Date: 30/03/2023 12:27:36 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+
+
+
+
+ALTER   PROCEDURE [dbo].[SP_MGTA_ContaMovimentacao]
+    @id int = NULL,
+	@idPropriedade varchar(12) = NULL
+
+AS
+BEGIN 
+	SELECT
+		Count(*)
+	FROM
+		TB_Produtor
+	INNER JOIN 
+		TB_Propriedade ON TB_Produtor.CNPJCPFProdutor = TB_Propriedade.CNPJCPFProprietario
+	INNER JOIN 
+		TB_GTA ON TB_GTA.CNPJCPFPro = TB_Produtor.CNPJCPFProdutor
+	WHERE
+		TB_Produtor.id = @id  AND
+		TB_Propriedade.IdPropriedade = @idPropriedade
+		
+
+END
+
